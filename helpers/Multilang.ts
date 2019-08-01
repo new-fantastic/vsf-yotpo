@@ -7,12 +7,13 @@ export const isMultilangSet = () => {
   );
 };
 
-export const hasMultilangProperStructure = () => {
+export const hasMultilangProperStructure = (customConfig?) => {
   // You should invoke isMultilangSet before that
+  const cfg = customConfig ? customConfig : config;
   for (let key of Object.keys(config.yotpo.langs)) {
     if (
-      !config.yotpo.langs[key].hasOwnProperty("account_id") ||
-      !config.yotpo.langs[key].hasOwnProperty("app_key")
+      !cfg.yotpo.langs[key].hasOwnProperty("account_id") ||
+      !cfg.yotpo.langs[key].hasOwnProperty("app_key")
     ) {
       throw new Error(
         "Yotpo - Bad config - Lang " + key + " does not have needed attributes"

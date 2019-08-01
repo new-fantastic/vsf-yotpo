@@ -28,5 +28,16 @@ describe("Multilang", () => {
 
   it("checks structure of config", () => {
     expect(hasMultilangProperStructure()).toBeTruthy();
+
+    expect(() => {
+      hasMultilangProperStructure({
+        yotpo: {
+          langs: {
+            de: {},
+            it: {}
+          }
+        }
+      });
+    }).toThrow();
   });
 });

@@ -13,5 +13,11 @@ jest.mock("config", () => ({
 describe("Singlelang", () => {
   it("checks structure of config", () => {
     expect(hasSinglelangProperStructure()).toBeTruthy();
+
+    expect(() => {
+      hasSinglelangProperStructure({
+        yotpo: {}
+      });
+    }).toThrow();
   });
 });

@@ -1,9 +1,10 @@
 import config from "config";
 
-export const hasSinglelangProperStructure = () => {
+export const hasSinglelangProperStructure = (customConfig?) => {
+  const cfg = customConfig ? customConfig : config;
   if (
-    config.yotpo.hasOwnProperty("app_key") &&
-    config.yotpo.hasOwnProperty("account_id")
+    cfg.yotpo.hasOwnProperty("app_key") &&
+    cfg.yotpo.hasOwnProperty("account_id")
   ) {
     return true;
   } else {
