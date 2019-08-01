@@ -18,18 +18,18 @@ export const VsfYotpo = createModule({
       - dispatches action with proper payload
       - resets form after send
       - resetForm resets form
-    - VoteOnReview.js
+    - [DONE] VoteOnReview.js
       - dispatches action with proper payload
-    - GetKey.ts
+    - [DONE] GetKey.ts
       - optional config? parameter
       - test it
     - Actions
-      - write util function for creating action
-      - test it
-      - move hasNeededFields to helpers
-      - test hasNeededFields
-      - move attachQueryStrings to helpers
-      - test attachQueryStrings
+      - [DONE] move hasNeededFields to helpers
+      - [DONE] test hasNeededFields
+      - [DONE] move attachQueryStrings to helpers
+      - [DONE] test attachQueryStrings
+      - [PREAPRING] write util function for creating action
+      - [PREAPRING] test it
       - rewrite actions to use actionFactory
       - prepare url patterns and autofill them
       - test it

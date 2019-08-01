@@ -1,16 +1,17 @@
 import config from "config";
 
-export const isMultilangSet = () => {
+export const isMultilangSet = (customConfig?) => {
+  const cfg = customConfig ? customConfig : config;
+
   return (
-    config.yotpo.hasOwnProperty("langs") &&
-    Object.keys(config.yotpo.langs).length > 0
+    cfg.yotpo.hasOwnProperty("langs") && Object.keys(cfg.yotpo.langs).length > 0
   );
 };
 
 export const hasMultilangProperStructure = (customConfig?) => {
   // You should invoke isMultilangSet before that
   const cfg = customConfig ? customConfig : config;
-  for (let key of Object.keys(config.yotpo.langs)) {
+  for (let key of Object.keys(cfg.yotpo.langs)) {
     if (
       !cfg.yotpo.langs[key].hasOwnProperty("account_id") ||
       !cfg.yotpo.langs[key].hasOwnProperty("app_key")

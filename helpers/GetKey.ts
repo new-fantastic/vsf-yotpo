@@ -3,26 +3,28 @@ import { hasSinglelangProperStructure } from "./Singlelang";
 import { currentStoreView } from "@vue-storefront/core/lib/multistore";
 import config from "config";
 
-export default () => {
-  if (isMultilangSet()) {
+export default (customConfig?) => {
+  const cfg = customConfig ? customConfig : config;
+
+  if (isMultilangSet(cfg)) {
     try {
-      hasMultilangProperStructure();
+      hasMultilangProperStructure(cfg);
       const { storeCode } = currentStoreView();
-      if (!config.yotpo.langs.hasOwnProperty(storeCode)) {
+      if (!cfg.yotpo.langs.hasOwnProperty(storeCode)) {
         throw new Error(
           "Yotpo - Bad config - Store code " + storeCode + "is not configured"
         );
       }
 
-      return config.yotpo.langs[storeCode].app_key;
+      return cfg.yotpo.langs[storeCode].app_key;
     } catch (e) {
       console.error(e);
       return;
     }
   } else {
     try {
-      hasSinglelangProperStructure();
-      return config.yotpo.app_key;
+      hasSinglelangProperStructure(cfg);
+      return cfg.yotpo.app_key;
     } catch (e) {
       console.error(e);
       return;
