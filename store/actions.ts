@@ -6,7 +6,7 @@ import { cacheStorage } from "../";
 
 import GetKey from "../helpers/GetKey";
 
-const baseUrl = "https://api.yotpo.com/v1/";
+const baseUrl = "https://api.yotpo.com/";
 const domain = "http://localhost.pl/";
 
 const hasNeededFields = (object, fields: string[]) => {
@@ -38,7 +38,7 @@ export const actions: ActionTree<YotpoState, any> = {
     ) {
       try {
         const appkey = GetKey();
-        await fetch(`${baseUrl}widget/reviews`, {
+        await fetch(`${baseUrl}v1/widget/reviews`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
