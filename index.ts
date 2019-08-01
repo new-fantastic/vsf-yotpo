@@ -5,9 +5,8 @@ import { createModule } from "@vue-storefront/core/lib/module";
 // import { beforeEach } from './router/beforeEach'
 // import { afterEach } from './router/afterEach'
 import { initCacheStorage } from "@vue-storefront/core/helpers/initCacheStorage";
-import { AddReview } from "@vue-storefront/core/modules/review/components/AddReview";
+import { KEY } from "./const";
 
-export const KEY = "vsf-yotpo";
 export const cacheStorage = initCacheStorage(KEY);
 export const VsfYotpo = createModule({
   key: KEY,
@@ -15,7 +14,7 @@ export const VsfYotpo = createModule({
 });
 
 /* Tests to write
-    - AddReview.js
+    - [DONE] AddReview.js
       - dispatches action with proper payload
       - resets form after send
       - resetForm resets form

@@ -1,13 +1,13 @@
-import { KEY } from "../";
+import { KEY } from "../const";
 
 export default {
   data() {
     return {
-      title: "Yeah",
-      content: "Wonderful!",
-      email: "john@ab.pl",
-      name: "John Smith",
-      score: 1,
+      title: "",
+      content: "",
+      email: "",
+      name: "",
+      score: null,
       status: null
     };
   },
@@ -67,6 +67,14 @@ export default {
           review_score: this.score
         };
 
+        for (let key of Object.keys(payload)) {
+          if (payload[key].length < 1) {
+            throw new TypeError(
+              "Yotpo - AddReview - " + key + " - cannot be empty"
+            );
+          }
+        }
+
         for (let field of optionalFields) {
           if (this[field]) {
             payload[field] = this[field];
@@ -74,23 +82,20 @@ export default {
         }
 
         await this.$store.dispatch(`${KEY}/addReview`, payload);
-
         this.resetForm();
-
-        status = true;
+        this.status = true;
       } catch (e) {
-        console.error(e);
-        status = false;
+        this.status = false;
+        console.error(e.message);
       }
     },
 
     resetForm() {
-      this.title = "Yeah";
-      this.content = "Wonderful!";
-      this.email = "john@ab.pl";
-      this.name = "John Smith";
-      this.score = 1;
-      this.status = null;
+      this.title = "";
+      this.content = "";
+      this.email = "";
+      this.name = "";
+      this.score = null;
     }
   }
 };
