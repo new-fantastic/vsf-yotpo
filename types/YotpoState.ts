@@ -1,3 +1,5 @@
 export interface YotpoState {
-  reviews: any[];
+  reviews: object;
+  productReviews: Array<any>;
+  widgetSiteReviews: object;
 }
