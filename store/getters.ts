@@ -16,6 +16,20 @@ export const getters: GetterTree<YotpoState, any> = {
       ? state.productReviews[index].products
       : null,
 
+  productImages: state => index =>
+    state.productReviews.hasOwnProperty(index) &&
+    state.productReviews[index].hasOwnProperty("images") &&
+    state.productReviews[index].images.hasOwnProperty("images")
+      ? state.productReviews[index].images.images
+      : null,
+
+  productImagesPagination: state => index =>
+    state.productReviews.hasOwnProperty(index) &&
+    state.productReviews[index].hasOwnProperty("images") &&
+    state.productReviews[index].images.hasOwnProperty("pagination")
+      ? state.productReviews[index].images.pagination
+      : null,
+
   siteReviews: state =>
     state.widgetSiteReviews.hasOwnProperty("reviews")
       ? state.widgetSiteReviews.reviews

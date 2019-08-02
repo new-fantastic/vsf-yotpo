@@ -60,6 +60,50 @@ describe("Getters", () => {
     expect(value).toEqual([product]);
   });
 
+  it("productImages", () => {
+    const product_id = 1234;
+    const product = "content";
+
+    const value = getters.productImages(
+      {
+        productReviews: {
+          [product_id]: {
+            images: {
+              images: [product]
+            }
+          }
+        }
+      },
+      {},
+      {},
+      {}
+    )(product_id);
+
+    expect(value).toEqual([product]);
+  });
+
+  it("productImagesPagination", () => {
+    const product_id = 1234;
+    const product = "content";
+
+    const value = getters.productImagesPagination(
+      {
+        productReviews: {
+          [product_id]: {
+            images: {
+              pagination: [product]
+            }
+          }
+        }
+      },
+      {},
+      {},
+      {}
+    )(product_id);
+
+    expect(value).toEqual([product]);
+  });
+
   it("siteReviews", () => {
     const content = "content";
 
