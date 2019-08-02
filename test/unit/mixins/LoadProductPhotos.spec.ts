@@ -1,4 +1,4 @@
-import LoadPhotosByAlbum from "../../../inheritable/LoadPhotosByAlbum";
+import LoadProductPhotos from "../../../inheritable/LoadProductPhotos";
 import { mountMixin } from "../../../../../../test/unit/utils";
 import { KEY } from "../../../const";
 
@@ -12,7 +12,7 @@ const mountProperBase = () => {
   };
 
   const spy = jest.spyOn($store, "dispatch");
-  const wrapper = mountMixin(LoadPhotosByAlbum, {
+  const wrapper = mountMixin(LoadProductPhotos, {
     mocks: {
       $store
     }
@@ -25,31 +25,31 @@ const mountProperBase = () => {
   };
 };
 
-describe("LoadPhotosByAlbum", () => {
-  it("fails if album_name is not provided", async () => {
+describe("LoadProductPhotos", () => {
+  it("fails if sku is not provided", async () => {
     const { wrapper } = mountProperBase();
 
     let error = null;
     try {
-      await (<any>wrapper.vm).LoadPhotosByAlbum();
+      await (<any>wrapper.vm).LoadProductPhotos();
     } catch (e) {
       error = e;
     }
     expect(error).not.toBeNull();
   });
 
-  it("dispatches action if album_name is okay", async () => {
+  it("dispatches action if sku is okay", async () => {
     const { spy, wrapper } = mountProperBase();
-    const album_name = 123;
+    const sku = 123;
 
     let error = null;
     try {
-      await (<any>wrapper.vm).LoadPhotosByAlbum(album_name);
+      await (<any>wrapper.vm).LoadProductPhotos(sku);
     } catch (e) {
       error = e;
     }
-    expect(spy).toHaveBeenCalledWith(`${KEY}/loadProductReviews`, {
-      album_name,
+    expect(spy).toHaveBeenCalledWith(`${KEY}/loadProductsImages`, {
+      sku,
       additionalFields: {}
     });
   });

@@ -11,10 +11,36 @@ export const mutations: MutationTree<any> = {
   },
   [types.SET_PRODUCT_BOTTOMLINE](state, payload) {
     if (state.productReviews.hasOwnProperty(payload.product_id)) {
-      Vue.set(state.productReviews[payload.product_id], "bottomline", payload);
+      Vue.set(
+        state.productReviews[payload.product_id],
+        "bottomline",
+        payload.content
+      );
     } else {
       Vue.set(state.productReviews, payload.product_id, {});
-      Vue.set(state.productReviews[payload.product_id], "bottomline", payload);
+      Vue.set(
+        state.productReviews[payload.product_id],
+        "bottomline",
+        payload.content
+      );
+    }
+  },
+  [types.SET_PRODUCT_IMAGES](state, payload) {
+    // Inside images we have
+    // pagination and images keys
+    if (state.productReviews.hasOwnProperty(payload.product_id)) {
+      Vue.set(
+        state.productReviews[payload.product_id],
+        "images",
+        payload.images
+      );
+    } else {
+      Vue.set(state.productReviews, payload.product_id, {});
+      Vue.set(
+        state.productReviews[payload.product_id],
+        "images",
+        payload.images
+      );
     }
   },
   [types.SET_ALBUM_PHOTOS](state, payload) {

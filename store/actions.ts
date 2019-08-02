@@ -180,7 +180,10 @@ export const actions: ActionTree<YotpoState, any> = {
       body: {},
       error: "Yotpo - Load bottom line - Something went wrong",
       onSuccess(response) {
-        store.commit(types.SET_PRODUCT_BOTTOMLINE, response.bottomline);
+        store.commit(types.SET_PRODUCT_BOTTOMLINE, {
+          product_id: payload.sku,
+          content: response.bottomline
+        });
       }
     })(store, payload);
   },
@@ -239,7 +242,10 @@ export const actions: ActionTree<YotpoState, any> = {
       error: "Yotpo - Load products image - Something went wrong",
       onSuccess(response) {
         // Hmm?
-        console.log("resp", response);
+        store.commit(types.SET_PRODUCT_IMAGES, {
+          product_id: payload.sku,
+          image: response
+        });
       }
     })(store, payload);
   }

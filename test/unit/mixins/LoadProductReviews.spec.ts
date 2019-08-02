@@ -49,7 +49,8 @@ describe("LoadProductReviews", () => {
       error = e;
     }
     expect(spy).toHaveBeenCalledWith(`${KEY}/loadProductReviews`, {
-      sku
+      sku,
+      additionalFields: {}
     });
   });
 });
