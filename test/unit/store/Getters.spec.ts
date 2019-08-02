@@ -59,4 +59,72 @@ describe("Getters", () => {
 
     expect(value).toEqual([product]);
   });
+
+  it("siteReviews", () => {
+    const content = "content";
+
+    const value = getters.siteReviews(
+      {
+        widgetSiteReviews: {
+          reviews: [content]
+        }
+      },
+      {},
+      {},
+      {}
+    );
+
+    expect(value).toEqual([content]);
+  });
+
+  it("siteProducts", () => {
+    const content = "content";
+
+    const value = getters.siteProducts(
+      {
+        widgetSiteReviews: {
+          products: [content]
+        }
+      },
+      {},
+      {},
+      {}
+    );
+
+    expect(value).toEqual([content]);
+  });
+
+  it("siteBottomline", () => {
+    const content = "content";
+
+    const value = getters.siteBottomline(
+      {
+        widgetSiteReviews: {
+          bottomline: [content]
+        }
+      },
+      {},
+      {},
+      {}
+    );
+
+    expect(value).toEqual([content]);
+  });
+
+  it("sitePagination", () => {
+    const content = "content";
+
+    const value = getters.sitePagination(
+      {
+        widgetSiteReviews: {
+          pagination: [content]
+        }
+      },
+      {},
+      {},
+      {}
+    );
+
+    expect(value).toEqual([content]);
+  });
 });

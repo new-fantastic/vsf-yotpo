@@ -1,5 +1,5 @@
 export interface YotpoState {
   reviews?: object;
   productReviews?: object;
-  widgetSiteReviews?: object;
+  widgetSiteReviews?: any;
 }

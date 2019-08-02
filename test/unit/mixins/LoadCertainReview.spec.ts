@@ -31,7 +31,7 @@ describe("LoadCertainReview", () => {
 
     let error = null;
     try {
-      await (<any>wrapper.vm).loadCertainReview();
+      await (<any>wrapper.vm).LoadCertainReview();
     } catch (e) {
       error = e;
     }
@@ -44,7 +44,7 @@ describe("LoadCertainReview", () => {
 
     let error = null;
     try {
-      await (<any>wrapper.vm).loadCertainReview(review_id);
+      await (<any>wrapper.vm).LoadCertainReview(review_id);
     } catch (e) {
       error = e;
     }

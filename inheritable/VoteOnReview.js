@@ -2,7 +2,7 @@ import { KEY } from "../const";
 
 export default {
   methods: {
-    async voteOnReview(review_id, updown) {
+    async VoteOnReview(review_id, updown) {
       try {
         if (isNaN(review_id) || typeof review_id !== "number") {
           throw new Error(

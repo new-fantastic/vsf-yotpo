@@ -27,7 +27,7 @@ describe("VoteOnReview", () => {
     const review_id = 124;
     const updown = "up";
 
-    await (<any>wrapper.vm).voteOnReview(review_id, updown);
+    await (<any>wrapper.vm).VoteOnReview(review_id, updown);
     expect(spy).toHaveBeenCalledWith(`${KEY}/voteOnReview`, {
       review_id,
       updown
@@ -40,7 +40,7 @@ describe("VoteOnReview", () => {
     const review_id = 124;
     const updown = "down";
 
-    await (<any>wrapper.vm).voteOnReview(review_id, updown);
+    await (<any>wrapper.vm).VoteOnReview(review_id, updown);
     expect(spy).toHaveBeenCalledWith(`${KEY}/voteOnReview`, {
       review_id,
       updown
@@ -53,7 +53,7 @@ describe("VoteOnReview", () => {
     const review_id = 124;
     const updown = "upxxx";
 
-    await (<any>wrapper.vm).voteOnReview(review_id, updown);
+    await (<any>wrapper.vm).VoteOnReview(review_id, updown);
     expect(spy).not.toHaveBeenCalled();
   });
 
@@ -63,13 +63,13 @@ describe("VoteOnReview", () => {
     let review_id = "abc";
     let updown = "up";
 
-    await (<any>wrapper.vm).voteOnReview(review_id, updown);
+    await (<any>wrapper.vm).VoteOnReview(review_id, updown);
     expect(spy).not.toHaveBeenCalled();
 
     review_id = "";
     updown = "up";
 
-    await (<any>wrapper.vm).voteOnReview(review_id, updown);
+    await (<any>wrapper.vm).VoteOnReview(review_id, updown);
     expect(spy).not.toHaveBeenCalled();
   });
 });
