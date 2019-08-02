@@ -7,7 +7,7 @@ export const mutations: MutationTree<any> = {
     state.reviews[payload.id] = payload;
   },
   [types.SET_PRODUCT_REVIEWS](state, payload) {
-    Vue.set(state.productReviews, payload.product_id, payload.reviews);
+    Vue.set(state.productReviews, payload.product_id, payload);
   },
   [types.SET_USER_REVIEWS](state, payload) {
     Vue.set(state.userReviews, payload.user_id, payload.reviews);

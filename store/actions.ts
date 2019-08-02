@@ -10,26 +10,6 @@ import ActionFactory from "../helpers/ActionFactory";
 const baseUrl = "https://api.yotpo.com/";
 const domain = "http://localhost.pl/";
 
-const hasNeededFields = (object, fields: string[]) => {
-  const keys = Object.keys(object);
-  for (let field of fields) {
-    if (!keys.includes(field)) {
-      return false;
-    }
-  }
-  return true;
-};
-
-const attachQueryStrings = (url: string, queries: object) => {
-  let base = url + "?";
-  let values = [];
-  for (const [key, value] of Object.entries(queries)) {
-    values.push(`${key}=${value}`);
-  }
-  base += values.join("&");
-  return base;
-};
-
 export const actions: ActionTree<YotpoState, any> = {
   addReview: ActionFactory({
     neededFields: [
