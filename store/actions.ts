@@ -180,8 +180,7 @@ export const actions: ActionTree<YotpoState, any> = {
       body: {},
       error: "Yotpo - Load bottom line - Something went wrong",
       onSuccess(response) {
-        // Hmm?
-        console.log("resp", response);
+        store.commit(types.SET_PRODUCT_BOTTOMLINE, response.bottomline);
       }
     })(store, payload);
   },
@@ -210,7 +209,10 @@ export const actions: ActionTree<YotpoState, any> = {
       error: "Yotpo - Load photos by album - Something went wrong",
       onSuccess(response) {
         // Hmm?
-        console.log("resp", response);
+        store.commit(types.SET_ALBUM_PHOTOS, {
+          album_name: payload.album_name,
+          content: response
+        });
       }
     })(store, payload);
   },

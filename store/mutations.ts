@@ -9,6 +9,17 @@ export const mutations: MutationTree<any> = {
   [types.SET_PRODUCT_REVIEWS](state, payload) {
     Vue.set(state.productReviews, payload.product_id, payload);
   },
+  [types.SET_PRODUCT_BOTTOMLINE](state, payload) {
+    if (state.productReviews.hasOwnProperty(payload.product_id)) {
+      Vue.set(state.productReviews[payload.product_id], "bottomline", payload);
+    } else {
+      Vue.set(state.productReviews, payload.product_id, {});
+      Vue.set(state.productReviews[payload.product_id], "bottomline", payload);
+    }
+  },
+  [types.SET_ALBUM_PHOTOS](state, payload) {
+    Vue.set(state.albums, payload.album_name, payload.content);
+  },
   [types.SET_USER_REVIEWS](state, payload) {
     Vue.set(state.userReviews, payload.user_id, payload.reviews);
   },

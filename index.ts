@@ -34,6 +34,9 @@ export const VsfYotpo = createModule({
       - [DONE] prepare url patterns and autofill them
       - [DONE] test it
       - Add support for additional fields
+      - Do not override state when fetching more pages!
+      - Additional fields for adding a review
+      - Inmixin prefix to CONST KEY
   Remove afterRegistration
   Improve
 */

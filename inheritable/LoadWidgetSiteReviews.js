@@ -1,7 +1,10 @@
 export default {
   methods: {
-    async LoadWidgetSiteReviews() {
-      await this.$store.dispatch("vsf-yotpo/loadWidgetSiteReviews");
+    async LoadWidgetSiteReviews(additionalFields = {}) {
+      await this.$store.dispatch(
+        "vsf-yotpo/loadWidgetSiteReviews",
+        additionalFields
+      );
     }
   }
 };

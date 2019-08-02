@@ -34,5 +34,20 @@ export const getters: GetterTree<YotpoState, any> = {
   sitePagination: state =>
     state.widgetSiteReviews.hasOwnProperty("pagination")
       ? state.widgetSiteReviews.pagination
+      : null,
+
+  albumByName: state => name =>
+    state.albums.hasOwnProperty(name) ? state.albums[name] : null,
+
+  albumsImages: state => name =>
+    state.albums.hasOwnProperty(name) &&
+    state.albums[name].hasOwnProperty("images")
+      ? state.albums[name].images
+      : null,
+
+  albumsPagination: state => name =>
+    state.albums.hasOwnProperty(name) &&
+    state.albums[name].hasOwnProperty("pagination")
+      ? state.albums[name].pagination
       : null
 };

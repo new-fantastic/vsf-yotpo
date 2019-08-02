@@ -127,4 +127,62 @@ describe("Getters", () => {
 
     expect(value).toEqual([content]);
   });
+
+  it("albumByName", () => {
+    const album_name = "abc";
+    const content = "content";
+
+    const value = getters.albumByName(
+      {
+        albums: {
+          [album_name]: content
+        }
+      },
+      {},
+      {},
+      {}
+    )(album_name);
+
+    expect(value).toEqual(content);
+  });
+
+  it("albumsImages", () => {
+    const album_name = "abc";
+    const content = "content";
+
+    const value = getters.albumsImages(
+      {
+        albums: {
+          [album_name]: {
+            images: [content]
+          }
+        }
+      },
+      {},
+      {},
+      {}
+    )(album_name);
+
+    expect(value).toEqual([content]);
+  });
+
+  it("albumsPagination", () => {
+    const album_name = "abc";
+    const content = "content";
+
+    const value = getters.albumsPagination(
+      {
+        albums: {
+          [album_name]: {
+            pagination: content
+          }
+        }
+      },
+      {},
+      {},
+      {}
+    )(album_name);
+
+    expect(value).toEqual(content);
+  });
 });
