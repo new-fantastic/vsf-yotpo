@@ -93,10 +93,17 @@ export default {
     } catch (e) {
       console.log(e);
     }
-  } //,
-  // mounted() {
-  //   console.log(this.$store.state["vsf-yotpo"]);
-  // }
+  },
+  async created() {
+    try {
+      if (!this.$store.getters["vsf-yotpo/productReviewsById"](this.sku))
+        await this.LoadProductReviews(this.sku);
+      if (!this.$store.getters["vsf-yotpo/productImages"](this.sku))
+        await this.LoadProductPhotos(this.sku);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 };
 </script>
 
