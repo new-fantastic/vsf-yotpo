@@ -2,6 +2,7 @@ import HasNeededFields from "./HasNeededFields";
 import GetKey from "./GetKey";
 import UrlFiller from "./UrlFiller";
 import AttachQueryStrings from "./AttachQueryStrings";
+import fetch from "isomorphic-fetch";
 
 interface ActionFactoryBody {
   appkey?: boolean;

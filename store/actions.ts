@@ -54,7 +54,7 @@ export const actions: ActionTree<YotpoState, any> = {
           payload.updown === "up"
             ? types.VOTE_UP_REVIEW
             : types.VOTE_DOWN_REVIEW,
-          { review_id: payload.review_id }
+          payload
         );
       }
     })(store, payload);
@@ -86,7 +86,6 @@ export const actions: ActionTree<YotpoState, any> = {
         additionalValues[field] = payload[field];
       }
     }
-
     await ActionFactory({
       neededFields: ["sku"],
       url: {
@@ -102,8 +101,11 @@ export const actions: ActionTree<YotpoState, any> = {
       onSuccess(response) {
         store.commit(types.SET_PRODUCT_REVIEWS, {
           product_id: payload.sku,
-          reviews: response.reviews
+          payload: response
         });
+      },
+      onFailure(err) {
+        console.log(err);
       }
     })(store, payload);
   },

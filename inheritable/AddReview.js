@@ -81,7 +81,7 @@ export default {
           }
         }
 
-        await this.$store.dispatch(`${KEY}/addReview2`, payload);
+        await this.$store.dispatch(`${KEY}/addReview`, payload);
         this.resetForm();
         this.status = true;
       } catch (e) {

@@ -7,7 +7,7 @@ export const mutations: MutationTree<any> = {
     state.reviews[payload.id] = payload;
   },
   [types.SET_PRODUCT_REVIEWS](state, payload) {
-    Vue.set(state.productReviews, payload.product_id, payload);
+    Vue.set(state.productReviews, payload.product_id, payload.payload);
   },
   [types.SET_PRODUCT_BOTTOMLINE](state, payload) {
     if (state.productReviews.hasOwnProperty(payload.product_id)) {
@@ -52,23 +52,51 @@ export const mutations: MutationTree<any> = {
   [types.SET_WIDGET_SITE_REVIEWS](state, payload) {
     state.widgetSiteReviews = payload;
   },
-  [types.VOTE_UP_REVIEW](state, { review_id }) {
+  [types.VOTE_UP_REVIEW](state, payload) {
     // Update in reviews
-    if (state.reviews.hasOwnProperty(review_id)) {
+    if (state.reviews.hasOwnProperty(payload.review_id)) {
       Vue.set(
-        state.reviews[review_id],
+        state.reviews[payload.review_id],
         "votes_up",
-        state.reviews[review_id].votes_up + 1
+        state.reviews[payload.review_id].votes_up + 1
       );
     }
+    // if (payload.hasOwnProperty("sku")) {
+    //   if (state.productReviews.hasOwnProperty(payload.sku)) {
+    //     const index = state.productReviews[payload.sku].reviews.findIndex(
+    //       v => v.id === payload.review_id
+    //     );
+    //     if (index) {
+    //       Vue.set(
+    //         state.productReviews[payload.sku].reviews,
+    //         index,
+    //         state.productReviews[payload.sku].reviews[index] + 1
+    //       );
+    //     }
+    //   }
+    // }
   },
-  [types.VOTE_DOWN_REVIEW](state, { review_id }) {
-    if (state.reviews.hasOwnProperty(review_id)) {
+  [types.VOTE_DOWN_REVIEW](state, payload) {
+    if (state.reviews.hasOwnProperty(payload.review_id)) {
       Vue.set(
-        state.reviews[review_id],
+        state.reviews[payload.review_id],
         "votes_down",
-        state.reviews[review_id].votes_up - 1
+        state.reviews[payload.review_id].votes_up - 1
       );
     }
+    // if (payload.hasOwnProperty("sku")) {
+    //   if (state.productReviews.hasOwnProperty(payload.sku)) {
+    //     const index = state.productReviews[payload.sku].reviews.findIndex(
+    //       v => v.id === payload.review_id
+    //     );
+    //     if (index) {
+    //       Vue.set(
+    //         state.productReviews[payload.sku].reviews,
+    //         index,
+    //         state.productReviews[payload.sku].reviews[index] + 1
+    //       );
+    //     }
+    //   }
+    // }
   }
 };

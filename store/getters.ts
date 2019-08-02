@@ -6,8 +6,17 @@ export const getters: GetterTree<YotpoState, any> = {
     state.reviews.hasOwnProperty(index) ? state.reviews[index] : null,
   productReviewsById: state => index =>
     state.productReviews.hasOwnProperty(index) &&
+    state.productReviews[index] !== null &&
+    state.productReviews[index] !== undefined &&
     state.productReviews[index].hasOwnProperty("reviews")
       ? state.productReviews[index].reviews
+      : null,
+  productBottomlineById: state => index =>
+    state.productReviews.hasOwnProperty(index) &&
+    state.productReviews[index] !== null &&
+    state.productReviews[index] !== undefined &&
+    state.productReviews[index].hasOwnProperty("bottomline")
+      ? state.productReviews[index].bottomline
       : null,
   // Above will return an array of probably one element!
   productDataById: state => index =>
@@ -19,6 +28,8 @@ export const getters: GetterTree<YotpoState, any> = {
   productImages: state => index =>
     state.productReviews.hasOwnProperty(index) &&
     state.productReviews[index].hasOwnProperty("images") &&
+    state.productReviews[index].images !== undefined &&
+    state.productReviews[index].images !== null &&
     state.productReviews[index].images.hasOwnProperty("images")
       ? state.productReviews[index].images.images
       : null,
