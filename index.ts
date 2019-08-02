@@ -28,11 +28,12 @@ export const VsfYotpo = createModule({
       - [DONE] test hasNeededFields
       - [DONE] move attachQueryStrings to helpers
       - [DONE] test attachQueryStrings
-      - [PREAPRING] write util function for creating action
-      - [PREAPRING] test it
-      - rewrite actions to use actionFactory
-      - prepare url patterns and autofill them
-      - test it
+      - [DONE] write util function for creating action
+      - [DONE] test it
+      - [DONE] rewrite actions to use actionFactory
+      - [DONE] prepare url patterns and autofill them
+      - [DONE] test it
+      - Add support for additional fields
   Remove afterRegistration
   Improve
 */

@@ -13,11 +13,11 @@ jest.mock("config", () => ({
   yotpo: {
     langs: {
       eu: {
-        app_key: 123,
+        app_key: "123",
         account_id: "123"
       },
       de: {
-        app_key: 555,
+        app_key: "555",
         account_id: "654"
       }
     }
@@ -25,7 +25,7 @@ jest.mock("config", () => ({
 }));
 
 const baseBody = () => ({
-  appKey: GetKey(),
+  appkey: "123",
   domain: "http://localhost.pl/"
 });
 
@@ -73,8 +73,7 @@ describe("ActionFactory", () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
-      },
-      body: baseBody()
+      }
     });
 
     action = ActionFactory({
@@ -87,7 +86,7 @@ describe("ActionFactory", () => {
       headers: {
         "Content-Type": "application/json"
       },
-      body: baseBody()
+      body: JSON.stringify(baseBody())
     });
   });
 
@@ -100,8 +99,7 @@ describe("ActionFactory", () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
-      },
-      body: baseBody()
+      }
     });
   });
 
@@ -111,8 +109,10 @@ describe("ActionFactory", () => {
       special2: "xyz"
     };
     let action = ActionFactory({
+      method: "POST",
       body: {
         ...baseBody(),
+        appkey: true,
         ...customBodyAttrs
       },
       url: { href: "http://yotpo.com/" }
@@ -121,14 +121,14 @@ describe("ActionFactory", () => {
     action({}, {});
 
     expect(spy).toHaveBeenLastCalledWith(expect.any(String), {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: {
+      body: JSON.stringify({
         ...baseBody(),
         ...customBodyAttrs
-      }
+      })
     });
   });
 
@@ -180,11 +180,26 @@ describe("ActionFactory", () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
-      },
-      body: {
-        ...baseBody()
       }
     });
+  });
+
+  it("adds queries to provided url", async () => {
+    const queries = {
+      key: "abc",
+      diff: 123
+    };
+    let action = ActionFactory({
+      url: { href: "http://yotpo.com" },
+      queries
+    });
+
+    let targetUrl = `http://yotpo.com?key=abc&diff=123`;
+
+    const spy = jest.spyOn(<any>global, "fetch");
+    action({}, {});
+
+    expect(spy).toHaveBeenLastCalledWith(targetUrl, expect.any(Object));
   });
 
   it("runs onSuccess callback", async () => {

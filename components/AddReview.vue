@@ -5,7 +5,7 @@
     Email:
     <input type="text" v-model="email" />
     Name:
-    <input type="text" v-model="email" />
+    <input type="text" v-model="name" />
     Content:
     <textarea v-model="content" />
     Stars:

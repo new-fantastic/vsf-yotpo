@@ -5,6 +5,7 @@ import * as types from "./mutation-types";
 import { cacheStorage } from "../";
 
 import GetKey from "../helpers/GetKey";
+import ActionFactory from "../helpers/ActionFactory";
 
 const baseUrl = "https://api.yotpo.com/";
 const domain = "http://localhost.pl/";
@@ -30,172 +31,234 @@ const attachQueryStrings = (url: string, queries: object) => {
 };
 
 export const actions: ActionTree<YotpoState, any> = {
-  async addReview({ commit }, payload) {
-    if (
-      hasNeededFields(payload, [
-        "sku",
-        "product_title",
-        "product_description",
-        "product_url",
-        "product_image_url",
-        "display_name",
-        "email",
-        "review_content",
-        "review_title",
-        "review_score"
-      ])
-    ) {
-      try {
-        const appkey = GetKey();
-        await fetch(`${baseUrl}v1/widget/reviews`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            ...payload,
-            appkey,
-            domain
-          })
-        });
-      } catch (e) {
-        throw new Error(e);
-      }
-    } else {
-      throw new Error("Yotpo - Add review - Necessary fields not provided");
+  addReview: ActionFactory({
+    neededFields: [
+      "sku",
+      "product_title",
+      "product_description",
+      "product_url",
+      "product_image_url",
+      "display_name",
+      "email",
+      "review_content",
+      "review_title",
+      "review_score"
+    ],
+    url: {
+      href: `${baseUrl}v1/widget/reviews`
+    },
+    method: "POST",
+    body: {
+      appkey: true,
+      domain
     }
-  },
-  async voteOnReview({ commit }, payload) {
-    if (hasNeededFields(payload, ["review_id", "updown"])) {
-      try {
-        await fetch(
-          `${baseUrl}reviews/${payload.review_id}/vote/${payload.updown}`,
-          {
-            method: "POST"
-          }
-        );
-        commit(
+  }),
+  async voteOnReview(store, payload) {
+    await ActionFactory({
+      neededFields: ["review_id", "updown"],
+      url: {
+        href: `${baseUrl}reviews/<review_id>/vote/<updown>`,
+        fillers: {
+          review_id: payload.review_id,
+          updown: payload.updown
+        }
+      },
+      method: "POST",
+      body: {
+        appkey: true,
+        domain
+      },
+      error: "Yotpo - Vote review - Necessary fields not provided",
+      onSuccess(response) {
+        store.commit(
           payload.updown === "up"
             ? types.VOTE_UP_REVIEW
             : types.VOTE_DOWN_REVIEW,
           { review_id: payload.review_id }
         );
-      } catch (e) {
-        throw new Error(e);
       }
-    } else {
-      throw new Error("Yotpo - Vote review - Necessary fields not provided");
-    }
+    })(store, payload);
   },
-  async loadCertainReview({ commit }, { review_id }) {
-    try {
-      let res = await fetch(`${baseUrl}reviews/${review_id}}`);
-      let { response } = await res.json();
-
-      commit(types.SET_REVIEW, response.review);
-    } catch (e) {
-      throw new Error(e);
-    }
-  },
-  async loadProductReviews({ commit }, payload) {
-    try {
-      const appkey = GetKey();
-      let url = `${baseUrl}v1/widget/${appkey}/products/${
-        payload.sku
-      }/reviews.json`;
-      let additionalFields = ["per_page", "page", "start", "sort", "direction"];
-      let additionalValues = {};
-      for (let field of additionalFields) {
-        if (payload.hasOwnProperty(field)) {
-          additionalValues[field] = payload[field];
+  async loadCertainReview(store, payload) {
+    await ActionFactory({
+      neededFields: ["review_id"],
+      url: {
+        href: `${baseUrl}reviews/<review_id>`,
+        fillers: {
+          review_id: payload.review_id
         }
+      },
+      body: {
+        appkey: true,
+        domain
+      },
+      error: "Yotpo - Load certain review - Something went wrong",
+      onSuccess(response) {
+        store.commit(types.SET_REVIEW, response.review);
       }
-      if (Object.keys(additionalValues).length > 0) {
-        url = attachQueryStrings(url, additionalValues);
-      }
-
-      let res = await fetch(url);
-      let { response } = await res.json();
-
-      commit(types.SET_PRODUCT_REVIEWS, {
-        product_id: payload.sku,
-        reviews: response.reviews
-      });
-    } catch (e) {
-      throw new Error(e);
-    }
+    })(store, payload);
   },
-  async loadUserReviews({ commit }, payload) {
-    // NEEDED PREMIUM PLAN
-    try {
-      const appkey = GetKey();
-      let url = `${baseUrl}products/${appkey}/yotpo_global_reviews/reviews.json`;
-      let additionalFields = [
-        "since_id",
-        "since_date",
-        "since_updated_at",
-        "count",
-        "page"
-      ];
-      let additionalValues = {
-        user_reference: payload.user_id
-      };
-      for (let field of additionalFields) {
-        if (payload.hasOwnProperty(field)) {
-          additionalValues[field] = payload[field];
-        }
+  async loadProductReviews(store, payload) {
+    let additionalFields = ["per_page", "page", "start", "sort", "direction"];
+    let additionalValues = {};
+    for (let field of additionalFields) {
+      if (payload.hasOwnProperty(field)) {
+        additionalValues[field] = payload[field];
       }
-      url = attachQueryStrings(url, additionalValues);
-
-      let res = await fetch(url);
-      let { response } = await res.json();
-
-      commit(types.SET_USER_REVIEWS, {
-        user_id: payload.user_id,
-        reviews: response.reviews
-      });
-    } catch (e) {
-      throw new Error(e);
     }
+
+    await ActionFactory({
+      neededFields: ["sku"],
+      url: {
+        href: `${baseUrl}v1/widget/<appkey>/products/<sku>/reviews.json`,
+        fillers: {
+          appkey: GetKey(),
+          sku: payload.sku
+        }
+      },
+      body: {},
+      queries: additionalValues,
+      error: "Yotpo - Load product reviews - Something went wrong",
+      onSuccess(response) {
+        store.commit(types.SET_PRODUCT_REVIEWS, {
+          product_id: payload.sku,
+          reviews: response.reviews
+        });
+      }
+    })(store, payload);
   },
-  async loadWidgetSiteReviews({ commit }, payload = {}) {
-    try {
-      const appkey = GetKey();
-
-      let url = `${baseUrl}v1/widget/${appkey}/products/yotpo_site_reviews/reviews.json`;
-      let additionalFields = ["per_page", "page"];
-      let additionalValues = {};
-      for (let field of additionalFields) {
-        if (payload.hasOwnProperty(field)) {
-          additionalValues[field] = payload[field];
-        }
+  async loadUserReviews(store, payload) {
+    let additionalFields = [
+      "since_id",
+      "since_date",
+      "since_updated_at",
+      "count",
+      "page"
+    ];
+    let additionalValues = {
+      user_reference: payload.user_id
+    };
+    for (let field of additionalFields) {
+      if (payload.hasOwnProperty(field)) {
+        additionalValues[field] = payload[field];
       }
-      if (Object.keys(additionalValues).length > 0) {
-        url = attachQueryStrings(url, additionalValues);
-      }
-
-      let res = await fetch(url);
-      let { response } = await res.json();
-
-      commit(types.SET_WIDGET_SITE_REVIEWS, response);
-    } catch (e) {
-      throw new Error(e);
     }
+
+    await ActionFactory({
+      neededFields: ["user_id"],
+      url: {
+        href: `${baseUrl}products/<appkey>/yotpo_global_reviews/reviews.json`,
+        fillers: {
+          appkey: GetKey()
+        }
+      },
+      body: {},
+      queries: additionalValues,
+      error: "Yotpo - Load product reviews - Something went wrong",
+      onSuccess(response) {
+        store.commit(types.SET_USER_REVIEWS, {
+          user_id: payload.user_id,
+          reviews: response.reviews
+        });
+      }
+    })(store, payload);
+  },
+  async loadWidgetSiteReviews(store, payload = {}) {
+    let additionalFields = ["per_page", "page"];
+    let additionalValues = {};
+    for (let field of additionalFields) {
+      if (payload.hasOwnProperty(field)) {
+        additionalValues[field] = payload[field];
+      }
+    }
+
+    await ActionFactory({
+      url: {
+        href: `${baseUrl}v1/widget/<appkey>/products/yotpo_site_reviews/reviews.json`,
+        fillers: {
+          appkey: GetKey()
+        }
+      },
+      body: {},
+      queries: additionalValues,
+      error: "Yotpo - Load product reviews - Something went wrong",
+      onSuccess(response) {
+        store.commit(types.SET_WIDGET_SITE_REVIEWS, response);
+      }
+    })(store, payload);
+  },
+
+  async loadBottomLine(store, payload) {
+    await ActionFactory({
+      url: {
+        href: `${baseUrl}products/<appkey>/<product_id>/bottomline`,
+        fillers: {
+          appkey: GetKey(),
+          product_id: payload.sku
+        }
+      },
+      body: {},
+      error: "Yotpo - Load bottom line - Something went wrong",
+      onSuccess(response) {
+        // Hmm?
+        console.log("resp", response);
+      }
+    })(store, payload);
+  },
+
+  async loadPhotosByAlbum(store, payload) {
+    let additionalFields = ["page", "per_page"];
+    let additionalValues = {};
+    for (let field of additionalFields) {
+      if (payload.hasOwnProperty(field)) {
+        additionalValues[field] = payload[field];
+      }
+    }
+
+    await ActionFactory({
+      neededFields: ["album_name"],
+      url: {
+        href: `${baseUrl}v1/widget/<appkey>/albums/by_name`,
+        fillers: {
+          appkey: GetKey()
+        }
+      },
+      queries: {
+        album_name: payload.album_name
+      },
+      body: {},
+      error: "Yotpo - Load photos by album - Something went wrong",
+      onSuccess(response) {
+        // Hmm?
+        console.log("resp", response);
+      }
+    })(store, payload);
+  },
+
+  async loadProductsImages(store, payload) {
+    let additionalFields = ["page", "per_page"];
+    let additionalValues = {};
+    for (let field of additionalFields) {
+      if (payload.hasOwnProperty(field)) {
+        additionalValues[field] = payload[field];
+      }
+    }
+
+    await ActionFactory({
+      neededFields: ["sku"],
+      url: {
+        href: `${baseUrl}v1/widget/<appkey>/albums/product/<product_id>`,
+        fillers: {
+          appkey: GetKey(),
+          product_id: payload.sku
+        }
+      },
+      body: {},
+      error: "Yotpo - Load products image - Something went wrong",
+      onSuccess(response) {
+        // Hmm?
+        console.log("resp", response);
+      }
+    })(store, payload);
   }
-  // async loadProductReviews({ commit }, sku) {
-  //   try {
-  //     let { data } = await fetch()
-  //   } catch(e) {
-
-  //   }
-  //   return new Promise((resolve, reject) => {
-  //     cacheStorage
-  //       .getItem("user")
-  //       .then(userData => {
-  //         commit(types.SET_USERS, userData);
-  //         resolve(userData);
-  //       })
-  //       .catch(() => reject());
-  //   });
-  // }
 };
