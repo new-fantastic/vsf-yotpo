@@ -32,14 +32,20 @@ export const mutations: MutationTree<any> = {
       Vue.set(
         state.productReviews[payload.product_id],
         "images",
-        payload.images
+        {
+          images: payload.image.images,
+          pagination: payload.image.pagination
+        }
       );
     } else {
       Vue.set(state.productReviews, payload.product_id, {});
       Vue.set(
         state.productReviews[payload.product_id],
         "images",
-        payload.images
+        {
+          images: payload.image.images,
+          pagination: payload.image.pagination
+        }
       );
     }
   },
