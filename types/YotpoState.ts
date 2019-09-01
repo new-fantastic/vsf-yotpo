@@ -3,4 +3,8 @@ export interface YotpoState {
   productReviews?: object;
   widgetSiteReviews?: any;
   albums?: object;
+  totals: {
+    total_reviews: number;
+    average_rating: number;
+  } | null;
 }
