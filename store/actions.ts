@@ -1,33 +1,35 @@
-import { YotpoState } from "../types/YotpoState";
-import { ActionTree } from "vuex";
-import * as types from "./mutation-types";
+import { YotpoState } from '../types/YotpoState';
+import { ActionTree } from 'vuex';
+import * as types from './mutation-types';
 
-import { cacheStorage } from "../";
+import fetch from 'isomorphic-fetch';
 
-import GetKey from "../helpers/GetKey";
-import ActionFactory from "../helpers/ActionFactory";
+import GetKey from '../helpers/GetKey';
+import ActionFactory from '../helpers/ActionFactory';
+import { currentStoreView } from '@vue-storefront/core/lib/multistore';
+import config from 'config';
 
-const baseUrl = "https://api.yotpo.com/";
-const domain = "http://localhost.pl/";
+const baseUrl = 'https://api.yotpo.com/';
+const domain = 'http://localhost.pl/';
 
 export const actions: ActionTree<YotpoState, any> = {
   addReview: ActionFactory({
     neededFields: [
-      "sku",
-      "product_title",
-      "product_description",
-      "product_url",
-      "product_image_url",
-      "display_name",
-      "email",
-      "review_content",
-      "review_title",
-      "review_score"
+      'sku',
+      'product_title',
+      'product_description',
+      'product_url',
+      'product_image_url',
+      'display_name',
+      'email',
+      'review_content',
+      'review_title',
+      'review_score'
     ],
     url: {
       href: `${baseUrl}v1/widget/reviews`
     },
-    method: "POST",
+    method: 'POST',
     body: {
       appkey: true,
       domain
@@ -35,7 +37,7 @@ export const actions: ActionTree<YotpoState, any> = {
   }),
   async voteOnReview(store, payload) {
     await ActionFactory({
-      neededFields: ["review_id", "updown"],
+      neededFields: ['review_id', 'updown'],
       url: {
         href: `${baseUrl}reviews/<review_id>/vote/<updown>`,
         fillers: {
@@ -43,15 +45,15 @@ export const actions: ActionTree<YotpoState, any> = {
           updown: payload.updown
         }
       },
-      method: "POST",
+      method: 'POST',
       body: {
         appkey: true,
         domain
       },
-      error: "Yotpo - Vote review - Necessary fields not provided",
+      error: 'Yotpo - Vote review - Necessary fields not provided',
       onSuccess(response) {
         store.commit(
-          payload.updown === "up"
+          payload.updown === 'up'
             ? types.VOTE_UP_REVIEW
             : types.VOTE_DOWN_REVIEW,
           payload
@@ -61,7 +63,7 @@ export const actions: ActionTree<YotpoState, any> = {
   },
   async loadCertainReview(store, payload) {
     await ActionFactory({
-      neededFields: ["review_id"],
+      neededFields: ['review_id'],
       url: {
         href: `${baseUrl}reviews/<review_id>`,
         fillers: {
@@ -72,14 +74,14 @@ export const actions: ActionTree<YotpoState, any> = {
         appkey: true,
         domain
       },
-      error: "Yotpo - Load certain review - Something went wrong",
+      error: 'Yotpo - Load certain review - Something went wrong',
       onSuccess(response) {
         store.commit(types.SET_REVIEW, response.review);
       }
     })(store, payload);
   },
   async loadProductReviews(store, payload) {
-    let additionalFields = ["per_page", "page", "start", "sort", "direction"];
+    let additionalFields = ['per_page', 'page', 'start', 'sort', 'direction'];
     let additionalValues = {};
     for (let field of additionalFields) {
       if (payload.hasOwnProperty(field)) {
@@ -87,7 +89,7 @@ export const actions: ActionTree<YotpoState, any> = {
       }
     }
     await ActionFactory({
-      neededFields: ["sku"],
+      neededFields: ['sku'],
       url: {
         href: `${baseUrl}v1/widget/<appkey>/products/<sku>/reviews.json`,
         fillers: {
@@ -97,7 +99,7 @@ export const actions: ActionTree<YotpoState, any> = {
       },
       body: {},
       queries: additionalValues,
-      error: "Yotpo - Load product reviews - Something went wrong",
+      error: 'Yotpo - Load product reviews - Something went wrong',
       onSuccess(response) {
         store.commit(types.SET_PRODUCT_REVIEWS, {
           product_id: payload.sku,
@@ -111,11 +113,11 @@ export const actions: ActionTree<YotpoState, any> = {
   },
   async loadUserReviews(store, payload) {
     let additionalFields = [
-      "since_id",
-      "since_date",
-      "since_updated_at",
-      "count",
-      "page"
+      'since_id',
+      'since_date',
+      'since_updated_at',
+      'count',
+      'page'
     ];
     let additionalValues = {
       user_reference: payload.user_id
@@ -127,7 +129,7 @@ export const actions: ActionTree<YotpoState, any> = {
     }
 
     await ActionFactory({
-      neededFields: ["user_id"],
+      neededFields: ['user_id'],
       url: {
         href: `${baseUrl}products/<appkey>/yotpo_global_reviews/reviews.json`,
         fillers: {
@@ -136,7 +138,7 @@ export const actions: ActionTree<YotpoState, any> = {
       },
       body: {},
       queries: additionalValues,
-      error: "Yotpo - Load product reviews - Something went wrong",
+      error: 'Yotpo - Load product reviews - Something went wrong',
       onSuccess(response) {
         store.commit(types.SET_USER_REVIEWS, {
           user_id: payload.user_id,
@@ -146,7 +148,7 @@ export const actions: ActionTree<YotpoState, any> = {
     })(store, payload);
   },
   async loadWidgetSiteReviews(store, payload = {}) {
-    let additionalFields = ["per_page", "page"];
+    let additionalFields = ['per_page', 'page'];
     let additionalValues = {};
     for (let field of additionalFields) {
       if (payload.hasOwnProperty(field)) {
@@ -163,7 +165,7 @@ export const actions: ActionTree<YotpoState, any> = {
       },
       body: {},
       queries: additionalValues,
-      error: "Yotpo - Load product reviews - Something went wrong",
+      error: 'Yotpo - Load product reviews - Something went wrong',
       onSuccess(response) {
         store.commit(types.SET_WIDGET_SITE_REVIEWS, response);
       }
@@ -180,7 +182,7 @@ export const actions: ActionTree<YotpoState, any> = {
         }
       },
       body: {},
-      error: "Yotpo - Load bottom line - Something went wrong",
+      error: 'Yotpo - Load bottom line - Something went wrong',
       onSuccess(response) {
         store.commit(types.SET_PRODUCT_BOTTOMLINE, {
           product_id: payload.sku,
@@ -191,7 +193,7 @@ export const actions: ActionTree<YotpoState, any> = {
   },
 
   async loadPhotosByAlbum(store, payload) {
-    let additionalFields = ["page", "per_page"];
+    let additionalFields = ['page', 'per_page'];
     let additionalValues = {};
     for (let field of additionalFields) {
       if (payload.hasOwnProperty(field)) {
@@ -200,7 +202,7 @@ export const actions: ActionTree<YotpoState, any> = {
     }
 
     await ActionFactory({
-      neededFields: ["album_name"],
+      neededFields: ['album_name'],
       url: {
         href: `${baseUrl}v1/widget/<appkey>/albums/by_name`,
         fillers: {
@@ -211,7 +213,7 @@ export const actions: ActionTree<YotpoState, any> = {
         album_name: payload.album_name
       },
       body: {},
-      error: "Yotpo - Load photos by album - Something went wrong",
+      error: 'Yotpo - Load photos by album - Something went wrong',
       onSuccess(response) {
         // Hmm?
         store.commit(types.SET_ALBUM_PHOTOS, {
@@ -223,7 +225,7 @@ export const actions: ActionTree<YotpoState, any> = {
   },
 
   async loadProductsImages(store, payload) {
-    let additionalFields = ["page", "per_page"];
+    let additionalFields = ['page', 'per_page'];
     let additionalValues = {};
     for (let field of additionalFields) {
       if (payload.hasOwnProperty(field)) {
@@ -232,7 +234,7 @@ export const actions: ActionTree<YotpoState, any> = {
     }
 
     await ActionFactory({
-      neededFields: ["sku"],
+      neededFields: ['sku'],
       url: {
         href: `${baseUrl}v1/widget/<appkey>/albums/product/<product_id>`,
         fillers: {
@@ -241,7 +243,7 @@ export const actions: ActionTree<YotpoState, any> = {
         }
       },
       body: {},
-      error: "Yotpo - Load products image - Something went wrong",
+      error: 'Yotpo - Load products image - Something went wrong',
       onSuccess(response) {
         // Hmm?
         store.commit(types.SET_PRODUCT_IMAGES, {
@@ -250,5 +252,16 @@ export const actions: ActionTree<YotpoState, any> = {
         });
       }
     })(store, payload);
+  },
+
+  async loadTotals({ commit }) {
+    try {
+      const { storeCode } = currentStoreView();
+      let r = await fetch(`${config.api.url}ext/yotpo/${storeCode}`);
+      let { result } = await r.json();
+      commit(types.SET_TOTALS, result);
+    } catch (err) {
+      console.error(err);
+    }
   }
 };

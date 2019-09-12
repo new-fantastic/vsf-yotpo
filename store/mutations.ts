@@ -1,6 +1,6 @@
-import { MutationTree } from "vuex";
-import * as types from "./mutation-types";
-import Vue from "vue";
+import { MutationTree } from 'vuex';
+import * as types from './mutation-types';
+import Vue from 'vue';
 
 export const mutations: MutationTree<any> = {
   [types.SET_REVIEW](state, payload) {
@@ -13,14 +13,14 @@ export const mutations: MutationTree<any> = {
     if (state.productReviews.hasOwnProperty(payload.product_id)) {
       Vue.set(
         state.productReviews[payload.product_id],
-        "bottomline",
+        'bottomline',
         payload.content
       );
     } else {
       Vue.set(state.productReviews, payload.product_id, {});
       Vue.set(
         state.productReviews[payload.product_id],
-        "bottomline",
+        'bottomline',
         payload.content
       );
     }
@@ -29,24 +29,16 @@ export const mutations: MutationTree<any> = {
     // Inside images we have
     // pagination and images keys
     if (state.productReviews.hasOwnProperty(payload.product_id)) {
-      Vue.set(
-        state.productReviews[payload.product_id],
-        "images",
-        {
-          images: payload.image.images,
-          pagination: payload.image.pagination
-        }
-      );
+      Vue.set(state.productReviews[payload.product_id], 'images', {
+        images: payload.image.images,
+        pagination: payload.image.pagination
+      });
     } else {
       Vue.set(state.productReviews, payload.product_id, {});
-      Vue.set(
-        state.productReviews[payload.product_id],
-        "images",
-        {
-          images: payload.image.images,
-          pagination: payload.image.pagination
-        }
-      );
+      Vue.set(state.productReviews[payload.product_id], 'images', {
+        images: payload.image.images,
+        pagination: payload.image.pagination
+      });
     }
   },
   [types.SET_ALBUM_PHOTOS](state, payload) {
@@ -63,7 +55,7 @@ export const mutations: MutationTree<any> = {
     if (state.reviews.hasOwnProperty(payload.review_id)) {
       Vue.set(
         state.reviews[payload.review_id],
-        "votes_up",
+        'votes_up',
         state.reviews[payload.review_id].votes_up + 1
       );
     }
@@ -86,7 +78,7 @@ export const mutations: MutationTree<any> = {
     if (state.reviews.hasOwnProperty(payload.review_id)) {
       Vue.set(
         state.reviews[payload.review_id],
-        "votes_down",
+        'votes_down',
         state.reviews[payload.review_id].votes_up - 1
       );
     }
@@ -104,5 +96,9 @@ export const mutations: MutationTree<any> = {
     //     }
     //   }
     // }
+  },
+
+  [types.SET_TOTALS](state, payload) {
+    state.totals = payload;
   }
 };
