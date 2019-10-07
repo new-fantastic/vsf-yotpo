@@ -10,12 +10,14 @@
         <span>{{review.title}}</span>
       </div>
       <div class="review__score">
-        <star-rating
-          :increment=0.5
-          :read-only=true
-          :star-size=18
-          v-model=review.score
-        />
+        <no-ssr>
+          <star-rating
+            :increment=0.5
+            :read-only=true
+            :star-size=18
+            v-model=review.score
+          />
+        </no-ssr>
         <span class="review__score-date">{{review.newDate[0]}}</span>
       </div>
       <div class="review__content">
@@ -74,6 +76,7 @@ import LoadProductReviews from "../inheritable/LoadProductReviews";
 import LoadProductPhotos from "../inheritable/LoadProductPhotos";
 import VoteOnReview from "../inheritable/VoteOnReview";
 import StarRating from 'vue-star-rating'
+import NoSSR from 'vue-no-ssr'
 
 export default {
   props: {
@@ -82,20 +85,19 @@ export default {
     }
   },
   components: {
-    StarRating
+    StarRating,
+    'no-ssr': NoSSR
   },
   computed: {
     reviews() {
       return this.$store.getters["vsf-yotpo/productReviewsById"](this.sku);
     },
-    bottomline() {
-      return this.$store.getters["vsf-yotpo/productBottomlineById"](this.sku);
-    },
+    
     images() {
       return this.$store.getters["vsf-yotpo/productImages"](this.sku);
     },
     customData() {
-      return this.reviews.map(v => {
+      return this.reviews ? this.reviews.map(v => {
         const reg = /\d{4}-\d{2}-\d{2}/gm
         const newDate = v.created_at.match(reg);
 
@@ -103,7 +105,7 @@ export default {
           ...v,
           newDate
         }
-      });
+      }) : null
     }
   },
   mixins: [LoadProductReviews, VoteOnReview, LoadProductPhotos],
@@ -115,7 +117,7 @@ export default {
       console.log(e);
     }
   },
-  async created() {
+  async mounted() {
     try {
       if (!this.$store.getters["vsf-yotpo/productReviewsById"](this.sku))
         await this.LoadProductReviews(this.sku);
