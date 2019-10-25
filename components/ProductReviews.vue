@@ -143,7 +143,7 @@ export default {
       return this.$store.getters["vsf-yotpo/productBottomlineById"](this.sku).total_review;
     },
     totalPages() {
-      if (this.reviewsCounter <= this.pagination.perPage) {
+      if (this.reviewsCounter <= 5) {
         return 1;
       } else if (this.reviewsCounter % 5) {
         return Math.ceil((this.reviewsCounter) / 5)
@@ -155,7 +155,7 @@ export default {
   methods: {
     async loadMoreReviews() {
       try {
-        await this.LoadProductReviews(this.sku, { page:  this.pagination.currentPage++});
+        await this.LoadProductReviews(this.sku, { page: this.pagination.currentPage++ });
       } catch (e) {
         console.log(e)
       }
@@ -181,16 +181,6 @@ export default {
       console.log(e);
     }
     console.log(this.$store.state)
-  },
-  async created() {
-    try {
-      if (
-          !this.$store.getters["vsf-yotpo/productReviewsById"](this.sku)
-      )
-        await this.LoadProductReviews(this.sku);
-    } catch (e) {
-      console.log(e);
-    }
   }
 };
 </script>
