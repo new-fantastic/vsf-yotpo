@@ -24,6 +24,28 @@
         <span>{{review.content}}</span>
       </div>
     </div>
+    <div
+      class="pagination"
+      v-if="this.reviewsCounter"
+    >
+      <ButtonFull
+        class="pagination__button"
+        @click="loadMoreReviews"
+        v-if="this.pagination.currentPage !== totalPages"
+      >
+        {{ $t('Show more') }}
+      </ButtonFull>
+      <p class="pagination__counter">
+        <!-- {{ $t('Page') + + $t('of')  }} -->
+        Page {{ this.pagination.currentPage }} of {{ totalPages }}
+      </p>
+      <div class="pagination__progress-bar">
+        <span
+          class="pagination__progress-bar-inner"
+          :style="`width: ${(this.pagination.currentPage / totalPages) * 100}%`"
+        />
+      </div>
+    </div>
 
 
       <!-- <div>
@@ -72,13 +94,22 @@
 </template>
 
 <script>
-import LoadProductReviews from "../inheritable/LoadProductReviews";
+  import LoadProductReviews from "../inheritable/LoadProductReviews";
 import LoadProductPhotos from "../inheritable/LoadProductPhotos";
 import VoteOnReview from "../inheritable/VoteOnReview";
-import StarRating from 'vue-star-rating'
-import NoSSR from 'vue-no-ssr'
+import StarRating from 'vue-star-rating';
+import NoSSR from 'vue-no-ssr';
+import ButtonFull from 'theme/components/base/ButtonFull/ButtonFull.vue';
 
 export default {
+  data() {
+    return {
+      pagination: {
+        current: 0,
+        currentPage: 1,
+      }
+    }
+  },
   props: {
     sku: {
       type: String | Number
@@ -86,13 +117,14 @@ export default {
   },
   components: {
     StarRating,
-    'no-ssr': NoSSR
+    'no-ssr': NoSSR,
+    ButtonFull
   },
   computed: {
     reviews() {
       return this.$store.getters["vsf-yotpo/productReviewsById"](this.sku);
     },
-    
+
     images() {
       return this.$store.getters["vsf-yotpo/productImages"](this.sku);
     },
@@ -106,6 +138,27 @@ export default {
           newDate
         }
       }) : null
+    },
+    reviewsCounter() {
+      return this.$store.getters["vsf-yotpo/productBottomlineById"](this.sku).total_review;
+    },
+    totalPages() {
+      if (this.reviewsCounter <= this.pagination.perPage) {
+        return 1;
+      } else if (this.reviewsCounter % 5) {
+        return Math.ceil((this.reviewsCounter) / 5)
+      } else {
+        return Math.ceil((this.reviewsCounter) / 5) - 1;
+      }
+    },
+  },
+  methods: {
+    async loadMoreReviews() {
+      try {
+        await this.LoadProductReviews(this.sku, { page:  this.pagination.currentPage++});
+      } catch (e) {
+        console.log(e)
+      }
     }
   },
   mixins: [LoadProductReviews, VoteOnReview, LoadProductPhotos],
@@ -113,6 +166,7 @@ export default {
     try {
       await this.LoadProductReviews(this.sku);
       await this.LoadProductPhotos(this.sku);
+      await this.LoadProductReviews(this.sku);
     } catch (e) {
       console.log(e);
     }
@@ -128,6 +182,16 @@ export default {
     }
     console.log(this.$store.state)
   },
+  async created() {
+    try {
+      if (
+          !this.$store.getters["vsf-yotpo/productReviewsById"](this.sku)
+      )
+        await this.LoadProductReviews(this.sku);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 };
 </script>
 
@@ -151,8 +215,8 @@ export default {
         @include margin($right: 12px);
         @include size(35px);
         @include font(
-          $color: #8c8c8c, 
-          $size: 18px, 
+          $color: #8c8c8c,
+          $size: 18px,
           $weight: bold
           );
         @include background($color: #d8d8d8);
@@ -204,6 +268,44 @@ export default {
 
     &__content {
       @include font($weight: 400);
+    }
+  }
+}
+.pagination {
+  @include margin($bottom: 250px, $top: 50px, $left: auto, $right: auto);
+  @include text($align: center);
+
+  &__counter {
+    @include margin($bottom: 10px, $top: 90px);
+    @include font(
+      $size: 14px,
+      $line-height: 14px,
+      $letter-spacing: 0.6px,
+      $color: $darkgrey
+    );
+  }
+
+  &__button {
+    @include size($max-x: 320px !important);
+  }
+
+  &__progress-bar {
+    @include size($x: 100%, $max-x: 565px, $y: 12px);
+    @include background($color: #f7f6f6);
+    @include position(relative);
+    @include margin(0 auto);
+    @include overflow(hidden);
+    border-radius: 6.5px;
+
+    &-inner {
+      @include size($y: 100%, $x: 0);
+      @include position(
+      $position: absolute,
+      $left: 0,
+      );
+      @include z-index(1);
+      @include background($color: $darkgrey);
+      transition: width 0.2s;
     }
   }
 }

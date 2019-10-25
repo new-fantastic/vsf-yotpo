@@ -6,7 +6,7 @@ export default {
       }
       await this.$store.dispatch("vsf-yotpo/loadProductReviews", {
         sku,
-        additionalFields
+        ...additionalFields
       });
     }
   }
