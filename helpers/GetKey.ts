@@ -11,12 +11,17 @@ export default (customConfig?) => {
       hasMultilangProperStructure(cfg);
       const { storeCode } = currentStoreView();
       if (!cfg.yotpo.langs.hasOwnProperty(storeCode)) {
-        throw new Error(
-          "Yotpo - Bad config - Store code " + storeCode + "is not configured"
+        console.log(
+          "Yotpo - Store code " + storeCode + " is not configured. Fallback to eu/es"
         );
+        if (storeCode === 'mx') {
+          return cfg.yotpo.langs['es'].app_key;
+        } else {
+          return cfg.yotpo.langs['eu'].app_key;
+        }
       }
 
-      return cfg.yotpo.langs[storeCode].app_key;
+      return cfg.yotpo.langs[storeCode].app_key; 
     } catch (e) {
       console.error(e);
       return;
