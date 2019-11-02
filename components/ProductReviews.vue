@@ -1,5 +1,5 @@
 <template>
-  <div class="product-reviews" v-if="customData">
+  <div class="product-reviews" ref="reviews-wrapper" v-if="customData">
     <div class="review" v-for="(review, index) in customData" :key="index">
       <div class="review__author">
         <div class="review__author-avatar">JL</div>
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-  import LoadProductReviews from "../inheritable/LoadProductReviews";
+import LoadProductReviews from "../inheritable/LoadProductReviews";
 import LoadProductPhotos from "../inheritable/LoadProductPhotos";
 import VoteOnReview from "../inheritable/VoteOnReview";
 import StarRating from 'vue-star-rating';
@@ -143,19 +143,22 @@ export default {
       return this.$store.getters["vsf-yotpo/productBottomlineById"](this.sku).total_review;
     },
     totalPages() {
-      if (this.reviewsCounter <= 5) {
-        return 1;
-      } else if (this.reviewsCounter % 5) {
-        return Math.ceil((this.reviewsCounter) / 5)
-      } else {
-        return Math.ceil((this.reviewsCounter) / 5) - 1;
-      }
+      const PER_PAGE = 5
+      return Math.ceil(this.reviewsCounter / 5)
+      // if (this.reviewsCounter <= 5) {
+      //   return 1;
+      // } else if (this.reviewsCounter % 5) {
+      //   return Math.ceil((this.reviewsCounter) / 5)
+      // } else {
+      //   return Math.ceil((this.reviewsCounter) / 5) - 1;
+      // }
     },
   },
   methods: {
     async loadMoreReviews() {
       try {
-        await this.LoadProductReviews(this.sku, { page: this.pagination.currentPage++ });
+        await this.LoadProductReviews(this.sku, { page: ++this.pagination.currentPage });
+        this.$emit('scrollTo', this.$refs['reviews-wrapper'])
       } catch (e) {
         console.log(e)
       }
@@ -164,9 +167,12 @@ export default {
   mixins: [LoadProductReviews, VoteOnReview, LoadProductPhotos],
   async serverPrefetch() {
     try {
-      await this.LoadProductReviews(this.sku);
-      await this.LoadProductPhotos(this.sku);
-      await this.LoadProductReviews(this.sku);
+      await Promise.all([
+        this.LoadProductReviews(this.sku, { page: this.pagination.currentPage++ }),
+        this.LoadProductPhotos(this.sku)
+      ])
+        
+      // await this.LoadProductReviews(this.sku);
     } catch (e) {
       console.log(e);
     }
@@ -174,13 +180,12 @@ export default {
   async mounted() {
     try {
       if (!this.$store.getters["vsf-yotpo/productReviewsById"](this.sku))
-        await this.LoadProductReviews(this.sku);
+        await this.LoadProductReviews(this.sku, { page: this.pagination.currentPage++ });
       if (!this.$store.getters["vsf-yotpo/productImages"](this.sku))
         await this.LoadProductPhotos(this.sku);
     } catch (e) {
       console.log(e);
     }
-    console.log(this.$store.state)
   }
 };
 </script>
