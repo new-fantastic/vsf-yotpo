@@ -171,7 +171,7 @@ export default {
         this.LoadProductReviews(this.sku, { page: this.pagination.currentPage++ }),
         this.LoadProductPhotos(this.sku)
       ])
-        
+
       // await this.LoadProductReviews(this.sku);
     } catch (e) {
       console.log(e);
@@ -269,6 +269,9 @@ export default {
 .pagination {
   @include margin($bottom: 250px, $top: 50px, $left: auto, $right: auto);
   @include text($align: center);
+  @include media('<=md') {
+    @include margin($top: 37px, $bottom: 58px);
+  }
 
   &__counter {
     @include margin($bottom: 10px, $top: 90px);
@@ -278,6 +281,9 @@ export default {
       $letter-spacing: 0.6px,
       $color: $darkgrey
     );
+    @include media('<=md') {
+      @include margin($top: 10px);
+    }
   }
 
   &__button {
