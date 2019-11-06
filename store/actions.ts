@@ -9,6 +9,8 @@ import ActionFactory from '../helpers/ActionFactory';
 import { currentStoreView } from '@vue-storefront/core/lib/multistore';
 import config from 'config';
 
+import SideRequest from 'core/lib/side-request.ts';
+
 const baseUrl = 'https://api.yotpo.com/';
 const domain = 'http://localhost.pl/';
 
@@ -257,7 +259,7 @@ export const actions: ActionTree<YotpoState, any> = {
   async loadTotals({ commit }) {
     try {
       const { storeCode } = currentStoreView();
-      let r = await fetch(`${config.api.url}ext/yotpo/${storeCode}`);
+      let r = await fetch(`${SideRequest(config.api, 'url')}ext/yotpo/${storeCode}`);
       let { result } = await r.json();
       commit(types.SET_TOTALS, result);
     } catch (err) {
