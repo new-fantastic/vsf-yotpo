@@ -9,7 +9,7 @@ import ActionFactory from '../helpers/ActionFactory';
 import { currentStoreView } from '@vue-storefront/core/lib/multistore';
 import config from 'config';
 
-import SideRequest from 'core/lib/side-request.ts';
+import SideRequest from '@vue-storefront/core/lib/side-request';
 
 const baseUrl = 'https://api.yotpo.com/';
 const domain = 'http://localhost.pl/';
