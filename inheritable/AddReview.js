@@ -1,12 +1,12 @@
-import { KEY } from "../const";
+import { KEY } from '../const';
 
 export default {
-  data() {
+  data () {
     return {
-      title: "",
-      content: "",
-      email: "",
-      name: "",
+      title: '',
+      content: '',
+      email: '',
+      name: '',
       score: null,
       status: null
     };
@@ -15,7 +15,7 @@ export default {
     sku: {
       required: true,
       type: [Number, String],
-      validator(value) {
+      validator (value) {
         return /^[a-zA-Z0-9_-]*$/.test(value);
       }
     },
@@ -44,15 +44,15 @@ export default {
     customer_metadata: Object
   },
   methods: {
-    async sendReview() {
+    async sendReview () {
       try {
         const optionalFields = [
-          "signature",
-          "time_stamp",
-          "reviewer_type",
-          "order_metadata",
-          "product_metadata",
-          "customer_metadata"
+          'signature',
+          'time_stamp',
+          'reviewer_type',
+          'order_metadata',
+          'product_metadata',
+          'customer_metadata'
         ];
         const payload = {
           sku: this.sku,
@@ -70,7 +70,7 @@ export default {
         for (let key of Object.keys(payload)) {
           if (payload[key].length < 1) {
             throw new TypeError(
-              "Yotpo - AddReview - " + key + " - cannot be empty"
+              'Yotpo - AddReview - ' + key + ' - cannot be empty'
             );
           }
         }
@@ -90,11 +90,11 @@ export default {
       }
     },
 
-    resetForm() {
-      this.title = "";
-      this.content = "";
-      this.email = "";
-      this.name = "";
+    resetForm () {
+      this.title = '';
+      this.content = '';
+      this.email = '';
+      this.name = '';
       this.score = null;
     }
   }
