@@ -28,13 +28,13 @@
       class="pagination"
       v-if="this.reviewsCounter"
     >
-      <ButtonFull
+      <BaseButton
         class="pagination__button"
         @click="loadMoreReviews"
         v-if="this.pagination.currentPage !== totalPages"
       >
         {{ $t('Show more') }}
-      </ButtonFull>
+      </BaseButton>
       <p class="pagination__counter">
         <!-- {{ $t('Page') + + $t('of')  }} -->
         Page {{ this.pagination.currentPage }} of {{ totalPages }}
@@ -99,7 +99,7 @@ import LoadProductPhotos from "../inheritable/LoadProductPhotos";
 import VoteOnReview from "../inheritable/VoteOnReview";
 import StarRating from 'vue-star-rating';
 import NoSSR from 'vue-no-ssr';
-import ButtonFull from 'theme/components/base/ButtonFull/ButtonFull.vue';
+import BaseButton from 'theme/components/base/BaseButton/BaseButton.vue';
 
 export default {
   data() {
@@ -118,7 +118,7 @@ export default {
   components: {
     StarRating,
     'no-ssr': NoSSR,
-    ButtonFull
+    BaseButton
   },
   computed: {
     reviews() {
@@ -191,123 +191,123 @@ export default {
 </script>
 
 <style lang="scss">
-.product-reviews {
+// .product-reviews {
 
-  .review {
-    @include margin($y: 30px);
+//   .review {
+//     @include margin($y: 30px);
 
-    &__author {
-      @include flex(
-        $align-items: center
-      );
-      @include margin($bottom: 11px);
+//     &__author {
+//       @include flex(
+//         $align-items: center
+//       );
+//       @include margin($bottom: 11px);
 
-      &-avatar {
-        @include flex(
-          $justify-content: center,
-          $align-items: center
-        );
-        @include margin($right: 12px);
-        @include size(35px);
-        @include font(
-          $color: #8c8c8c,
-          $size: 18px,
-          $weight: bold
-          );
-        @include background($color: #d8d8d8);
-        @include border(
-          $width: 1px,
-          $style: solid,
-          $color: #979797
-        );
-        border-radius: 50%;
-      }
+//       &-avatar {
+//         @include flex(
+//           $justify-content: center,
+//           $align-items: center
+//         );
+//         @include margin($right: 12px);
+//         @include size(35px);
+//         @include font(
+//           $color: #8c8c8c,
+//           $size: 18px,
+//           $weight: bold
+//           );
+//         @include background($color: #d8d8d8);
+//         @include border(
+//           $width: 1px,
+//           $style: solid,
+//           $color: #979797
+//         );
+//         border-radius: 50%;
+//       }
 
-      &-name {
-        @include font(
-          $color: #8c8c8c,
-          $size: 18px,
-          $letter-spacing: 2.57px
-        );
-      }
-  }
-    &__title,
-    &__content {
-      @include margin($left: 4px);
-      @include font(
-        $size: 16px,
-        $color: #8c8c8c,
-        $weight: bold
-      );
-    }
+//       &-name {
+//         @include font(
+//           $color: #8c8c8c,
+//           $size: 18px,
+//           $letter-spacing: 2.57px
+//         );
+//       }
+//   }
+//     &__title,
+//     &__content {
+//       @include margin($left: 4px);
+//       @include font(
+//         $size: 16px,
+//         $color: #8c8c8c,
+//         $weight: bold
+//       );
+//     }
 
-    &__score {
-      @include margin($left: 4px);
-      @include flex(
-        $align-items: center
-      );
+//     &__score {
+//       @include margin($left: 4px);
+//       @include flex(
+//         $align-items: center
+//       );
 
-      .vue-star-rating-rating-text {
-        @include display(none);
-      }
+//       .vue-star-rating-rating-text {
+//         @include display(none);
+//       }
 
-      &-date {
-      @include margin($left: 5px);
-      @include font(
-        $size: 13px,
-        $color: #8c8c8c,
-        $letter-spacing: 1.86px
-      );
-      }
-    }
+//       &-date {
+//       @include margin($left: 5px);
+//       @include font(
+//         $size: 13px,
+//         $color: #8c8c8c,
+//         $letter-spacing: 1.86px
+//       );
+//       }
+//     }
 
-    &__content {
-      @include font($weight: 400);
-    }
-  }
-}
-.pagination {
-  @include margin($bottom: 250px, $top: 50px, $left: auto, $right: auto);
-  @include text($align: center);
-  @include media('<=md') {
-    @include margin($top: 37px, $bottom: 58px);
-  }
+//     &__content {
+//       @include font($weight: 400);
+//     }
+//   }
+// }
+// .pagination {
+//   @include margin($bottom: 250px, $top: 50px, $left: auto, $right: auto);
+//   @include text($align: center);
+//   @include media('<=md') {
+//     @include margin($top: 37px, $bottom: 58px);
+//   }
 
-  &__counter {
-    @include margin($bottom: 10px, $top: 90px);
-    @include font(
-      $size: 14px,
-      $line-height: 14px,
-      $letter-spacing: 0.6px,
-      $color: $darkgrey
-    );
-    @include media('<=md') {
-      @include margin($top: 10px);
-    }
-  }
+//   &__counter {
+//     @include margin($bottom: 10px, $top: 90px);
+//     @include font(
+//       $size: 14px,
+//       $line-height: 14px,
+//       $letter-spacing: 0.6px,
+//       $color: $darkgrey
+//     );
+//     @include media('<=md') {
+//       @include margin($top: 10px);
+//     }
+//   }
 
-  &__button {
-    @include size($max-x: 320px !important);
-  }
+//   &__button {
+//     @include size($max-x: 320px !important);
+//   }
 
-  &__progress-bar {
-    @include size($x: 100%, $max-x: 565px, $y: 12px);
-    @include background($color: #f7f6f6);
-    @include position(relative);
-    @include margin(0 auto);
-    @include overflow(hidden);
-    border-radius: 6.5px;
+//   &__progress-bar {
+//     @include size($x: 100%, $max-x: 565px, $y: 12px);
+//     @include background($color: #f7f6f6);
+//     @include position(relative);
+//     @include margin(0 auto);
+//     @include overflow(hidden);
+//     border-radius: 6.5px;
 
-    &-inner {
-      @include size($y: 100%, $x: 0);
-      @include position(
-      $position: absolute,
-      $left: 0,
-      );
-      @include z-index(1);
-      @include background($color: $darkgrey);
-      transition: width 0.2s;
-    }
-  }
-}
+//     &-inner {
+//       @include size($y: 100%, $x: 0);
+//       @include position(
+//       $position: absolute,
+//       $left: 0,
+//       );
+//       @include z-index(1);
+//       @include background($color: $darkgrey);
+//       transition: width 0.2s;
+//     }
+//   }
+// }
 </style>

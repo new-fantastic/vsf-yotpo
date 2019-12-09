@@ -1,8 +1,8 @@
 export default {
   methods: {
-    async LoadWidgetSiteReviews(additionalFields = {}) {
+    async LoadWidgetSiteReviews (additionalFields = {}) {
       await this.$store.dispatch(
-        "vsf-yotpo/loadWidgetSiteReviews",
+        'vsf-yotpo/loadWidgetSiteReviews',
         additionalFields
       );
     }

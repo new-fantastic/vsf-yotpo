@@ -1,19 +1,19 @@
-import { KEY } from "../const";
+import { KEY } from '../const';
 
 export default {
   methods: {
-    async VoteOnReview(review_id, updown, productSku = 0) {
+    async VoteOnReview (review_id, updown, productSku = 0) {
       try {
-        if (isNaN(review_id) || typeof review_id !== "number") {
+        if (isNaN(review_id) || typeof review_id !== 'number') {
           throw new Error(
-            "Yotpo - VoteOnReview - " +
-              (review_id ? review_id : "[Empty]") +
-              " - is bad value for review_id"
+            'Yotpo - VoteOnReview - ' +
+              (review_id || '[Empty]') +
+              ' - is bad value for review_id'
           );
         }
-        if (updown !== "up" && updown !== "down") {
+        if (updown !== 'up' && updown !== 'down') {
           throw new Error(
-            "Yotpo - VoteOnReview - " + updown + " - is bad value for `updown`"
+            'Yotpo - VoteOnReview - ' + updown + ' - is bad value for `updown`'
           );
         }
         const payload = {

@@ -1,10 +1,10 @@
 export default {
   methods: {
-    async LoadProductReviews(sku, additionalFields = {}) {
+    async LoadProductReviews (sku, additionalFields = {}) {
       if (!sku) {
-        throw new Error("Yotpo - LoadProductReviews - SKU must be provided");
+        throw new Error('Yotpo - LoadProductReviews - SKU must be provided');
       }
-      await this.$store.dispatch("vsf-yotpo/loadProductReviews", {
+      await this.$store.dispatch('vsf-yotpo/loadProductReviews', {
         sku,
         ...additionalFields
       });
