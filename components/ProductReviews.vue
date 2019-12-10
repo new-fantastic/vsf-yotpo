@@ -2,7 +2,7 @@
   <div class="product-reviews" ref="reviews-wrapper" v-if="customData">
     <div class="review" v-for="(review, index) in customData" :key="index">
       <div class="review__author">
-        <div class="review__author-avatar">JL</div>
+        <!-- <div class="review__author-avatar">JL</div> -->
         <span class="review__author-name">
           {{review.user.display_name}}</span>
       </div>
@@ -30,7 +30,7 @@
     >
       <BaseButton
         class="pagination__button"
-        @click="loadMoreReviews"
+        @click.native="loadMoreReviews"
         v-if="this.pagination.currentPage !== totalPages"
       >
         {{ $t('Show more') }}
@@ -106,7 +106,7 @@ export default {
     return {
       pagination: {
         current: 0,
-        currentPage: 1,
+        currentPage: 0,
       }
     }
   },
@@ -125,9 +125,9 @@ export default {
       return this.$store.getters["vsf-yotpo/productReviewsById"](this.sku);
     },
 
-    images() {
-      return this.$store.getters["vsf-yotpo/productImages"](this.sku);
-    },
+    // images() {
+    //   return this.$store.getters["vsf-yotpo/productImages"](this.sku);
+    // },
     customData() {
       return this.reviews ? this.reviews.map(v => {
         const reg = /\d{4}-\d{2}-\d{2}/gm
@@ -158,7 +158,7 @@ export default {
     async loadMoreReviews() {
       try {
         await this.LoadProductReviews(this.sku, { page: ++this.pagination.currentPage });
-        this.$emit('scrollTo', this.$refs['reviews-wrapper'])
+        // this.$emit('scrollTo', this.$refs['reviews-wrapper'])
       } catch (e) {
         console.log(e)
       }
@@ -167,9 +167,10 @@ export default {
   mixins: [LoadProductReviews, VoteOnReview, LoadProductPhotos],
   async serverPrefetch() {
     try {
+      debugger;
       await Promise.all([
-        this.LoadProductReviews(this.sku, { page: this.pagination.currentPage++ }),
-        this.LoadProductPhotos(this.sku)
+        this.LoadProductReviews(this.sku, { page: this.pagination.currentPage++ })
+        // this.LoadProductPhotos(this.sku)
       ])
 
       // await this.LoadProductReviews(this.sku);
@@ -179,10 +180,11 @@ export default {
   },
   async mounted() {
     try {
+      this.pagination.currentPage++
       if (!this.$store.getters["vsf-yotpo/productReviewsById"](this.sku))
-        await this.LoadProductReviews(this.sku, { page: this.pagination.currentPage++ });
-      if (!this.$store.getters["vsf-yotpo/productImages"](this.sku))
-        await this.LoadProductPhotos(this.sku);
+        await this.LoadProductReviews(this.sku, { page: this.pagination.currentPage });
+      // if (!this.$store.getters["vsf-yotpo/productImages"](this.sku))
+      //   await this.LoadProductPhotos(this.sku);
     } catch (e) {
       console.log(e);
     }
