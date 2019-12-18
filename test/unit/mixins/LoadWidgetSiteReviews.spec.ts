@@ -30,8 +30,6 @@ describe("LoadWidgetSiteReviews", () => {
     const { spy, wrapper } = mountProperBase();
     await (<any>wrapper.vm).LoadWidgetSiteReviews();
 
-    expect(spy).toHaveBeenCalledWith(`${KEY}/loadWidgetSiteReviews`, {
-      additionalFields: {}
-    });
+    expect(spy).toHaveBeenCalledWith(`${KEY}/loadWidgetSiteReviews`, {});
   });
 });

@@ -48,7 +48,7 @@ describe("LoadPhotosByAlbum", () => {
     } catch (e) {
       error = e;
     }
-    expect(spy).toHaveBeenCalledWith(`${KEY}/loadProductReviews`, {
+    expect(spy).toHaveBeenCalledWith(`${KEY}/loadPhotosByAlbum`, {
       album_name,
       additionalFields: {}
     });
