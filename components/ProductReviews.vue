@@ -28,18 +28,38 @@
       class="pagination"
       v-if="this.reviewsCounter"
     >
+    <div 
+      class="pagination__cta"
+      :class="{'pagination__cta--center' : this.pagination.currentPage === totalPages || this.pagination.currentPage === 1}"
+    >
       <ButtonFull
         class="pagination__button"
+        :class="{'pagination__button--full' : this.pagination.currentPage === totalPages}"
+        @click="loadPreviewsReviews"
+        v-if="this.pagination.currentPage > 1"
+      >
+        {{ $t('Previous') }}
+      </ButtonFull>
+      <ButtonFull
+        class="pagination__button"
+        :class="{'pagination__button--full' : this.pagination.currentPage === 1}"
         @click="loadMoreReviews"
         v-if="this.pagination.currentPage !== totalPages"
       >
-        {{ $t('Show more') }}
+        {{ $t('Next') }}
       </ButtonFull>
-      <p class="pagination__counter">
+    </div>
+      <p 
+        class="pagination__counter"
+        v-if="totalPages > 1"
+      >
         <!-- {{ $t('Page') + + $t('of')  }} -->
         Page {{ this.pagination.currentPage }} of {{ totalPages }}
       </p>
-      <div class="pagination__progress-bar">
+      <div 
+        class="pagination__progress-bar"
+        v-if="totalPages > 1"
+      >
         <span
           class="pagination__progress-bar-inner"
           :style="`width: ${(this.pagination.currentPage / totalPages) * 100}%`"
@@ -162,6 +182,14 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    async loadPreviewsReviews () {
+      try {
+        await this.LoadProductReviews(this.sku, { page: --this.pagination.currentPage });
+        this.$emit('scrollTo', this.$refs['reviews-wrapper'])
+      } catch (e) {
+        console.log(e)
+      }
     }
   },
   mixins: [LoadProductReviews, VoteOnReview, LoadProductPhotos],
@@ -192,6 +220,11 @@ export default {
 
 <style lang="scss">
 .product-reviews {
+  max-width: 400px;
+  min-width: 400px;
+  @include media('<=md') {
+    @include size($max-x: 100%, $min-x: 100%);
+  }
 
   .review {
     @include margin($y: 30px);
@@ -273,6 +306,25 @@ export default {
     @include margin($top: 37px, $bottom: 58px);
   }
 
+  &__cta {
+    @include flex($justify-content: space-between);
+
+    &--center {
+      justify-content: center;
+    }
+
+  .pagination__button {
+    @include size($max-x: 180px !important);
+    @include media('<=ms') {
+      @include size($max-x: 150px !important);
+    }
+
+    &--full {
+      @include size($max-x: 350px !important);
+    }
+  }
+  }
+
   &__counter {
     @include margin($bottom: 10px, $top: 90px);
     @include font(
@@ -284,10 +336,6 @@ export default {
     @include media('<=md') {
       @include margin($top: 10px);
     }
-  }
-
-  &__button {
-    @include size($max-x: 320px !important);
   }
 
   &__progress-bar {
