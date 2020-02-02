@@ -26,35 +26,35 @@
     </div>
     <div
       class="pagination"
-      v-if="this.reviewsCounter"
+      v-if="reviewsCounter"
     >
     <div 
       class="pagination__cta"
-      :class="{'pagination__cta--center' : this.pagination.currentPage === totalPages || this.pagination.currentPage === 1}"
+      :class="{'pagination__cta--center' : pagination.currentPage === totalPages || pagination.currentPage === 1}"
     >
       <ButtonFull
         class="pagination__button"
-        :class="{'pagination__button--full' : this.pagination.currentPage === totalPages}"
+        :class="{'pagination__button--full' : pagination.currentPage === totalPages}"
         @click="loadPreviewsReviews"
-        v-if="this.pagination.currentPage > 1"
+        v-if="pagination.currentPage > 1"
       >
         {{ $t('Previous') }}
       </ButtonFull>
-      <ButtonFull
+      <!-- <ButtonFull
         class="pagination__button"
-        :class="{'pagination__button--full' : this.pagination.currentPage === 1}"
+        :class="{'pagination__button--full' : pagination.currentPage === 1}"
         @click="loadMoreReviews"
-        v-if="this.pagination.currentPage !== totalPages"
+        v-if="pagination.currentPage !== totalPages"
       >
         {{ $t('Next') }}
-      </ButtonFull>
+      </ButtonFull> -->
     </div>
-      <p 
+      <!-- <p 
         class="pagination__counter"
         v-if="totalPages > 1"
-      >
+      > -->
         <!-- {{ $t('Page') + + $t('of')  }} -->
-        Page {{ this.pagination.currentPage }} of {{ totalPages }}
+        <!-- Page {{ this.pagination.currentPage }} of {{ totalPages }}
       </p>
       <div 
         class="pagination__progress-bar"
@@ -64,7 +64,7 @@
           class="pagination__progress-bar-inner"
           :style="`width: ${(this.pagination.currentPage / totalPages) * 100}%`"
         />
-      </div>
+      </div> -->
     </div>
 
 
@@ -164,14 +164,7 @@ export default {
     },
     totalPages() {
       const PER_PAGE = 5
-      return Math.ceil(this.reviewsCounter / 5)
-      // if (this.reviewsCounter <= 5) {
-      //   return 1;
-      // } else if (this.reviewsCounter % 5) {
-      //   return Math.ceil((this.reviewsCounter) / 5)
-      // } else {
-      //   return Math.ceil((this.reviewsCounter) / 5) - 1;
-      // }
+      return Math.ceil(this.reviewsCounter / PER_PAGE)
     },
   },
   methods: {
@@ -196,7 +189,7 @@ export default {
   async serverPrefetch() {
     try {
       await Promise.all([
-        this.LoadProductReviews(this.sku, { page: this.pagination.currentPage++ }),
+        this.LoadProductReviews(this.sku, { page: this.pagination.currentPage }),
         this.LoadProductPhotos(this.sku)
       ])
 
