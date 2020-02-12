@@ -6,10 +6,14 @@ export default {
           "Yotpo - LoadPhotosByAlbum - album_name must be provided"
         );
       }
-      await this.$store.dispatch("vsf-yotpo/loadPhotosByAlbum", {
-        album_name,
-        additionalFields
-      });
+      try {
+        await this.$store.dispatch("vsf-yotpo/loadPhotosByAlbum", {
+          album_name,
+          additionalFields
+        });
+      } catch (err) {
+        console.log('Yotpo ', err)
+      }
     }
   }
 };

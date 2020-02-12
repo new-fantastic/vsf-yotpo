@@ -198,8 +198,8 @@ export const actions: ActionTree<YotpoState, any> = {
     let additionalFields = ['page', 'per_page'];
     let additionalValues = {};
     for (let field of additionalFields) {
-      if (payload.hasOwnProperty(field)) {
-        additionalValues[field] = payload[field];
+      if (payload.additionalFields.hasOwnProperty(field)) {
+        additionalValues[field] = payload.additionalFields[field];
       }
     }
 
@@ -212,7 +212,8 @@ export const actions: ActionTree<YotpoState, any> = {
         }
       },
       queries: {
-        album_name: payload.album_name
+        album_name: payload.album_name,
+        ...additionalValues
       },
       body: {},
       error: 'Yotpo - Load photos by album - Something went wrong',
@@ -220,7 +221,8 @@ export const actions: ActionTree<YotpoState, any> = {
         // Hmm?
         store.commit(types.SET_ALBUM_PHOTOS, {
           album_name: payload.album_name,
-          content: response
+          content: response,
+          merge: payload.additionalFields && payload.additionalFields.merge
         });
       }
     })(store, payload);

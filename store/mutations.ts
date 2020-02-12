@@ -42,7 +42,14 @@ export const mutations: MutationTree<any> = {
     }
   },
   [types.SET_ALBUM_PHOTOS](state, payload) {
-    Vue.set(state.albums, payload.album_name, payload.content);
+    if (payload.merge) {
+      Vue.set(state.albums[payload.album_name], 'images', [
+        ...state.albums[payload.album_name].images,
+        ...payload.content.images
+      ]);
+    } else {
+      Vue.set(state.albums, payload.album_name, payload.content);
+    }
   },
   [types.SET_USER_REVIEWS](state, payload) {
     Vue.set(state.userReviews, payload.user_id, payload.reviews);
