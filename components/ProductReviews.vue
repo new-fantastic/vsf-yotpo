@@ -40,21 +40,17 @@
       >
         {{ $t('Previous') }}
       </ButtonFull>
-      <!-- <ButtonFull
+      <ButtonFull
         class="pagination__button"
         :class="{'pagination__button--full' : pagination.currentPage === 1}"
-        @click="loadMoreReviews"
+        @click="loadMoreReviews" 
         v-if="pagination.currentPage !== totalPages"
       >
         {{ $t('Next') }}
-      </ButtonFull> -->
+      </ButtonFull>
     </div>
-      <!-- <p 
-        class="pagination__counter"
-        v-if="totalPages > 1"
-      > -->
-        <!-- {{ $t('Page') + + $t('of')  }} -->
-        <!-- Page {{ this.pagination.currentPage }} of {{ totalPages }}
+      <p class="pagination__counter" v-if="totalPages > 1">
+        {{ `${$t('Page')} ${this.pagination.currentPage} ${$t('of')} ${totalPages}` }}
       </p>
       <div 
         class="pagination__progress-bar"
@@ -64,7 +60,7 @@
           class="pagination__progress-bar-inner"
           :style="`width: ${(this.pagination.currentPage / totalPages) * 100}%`"
         />
-      </div> -->
+      </div>
     </div>
 
 
