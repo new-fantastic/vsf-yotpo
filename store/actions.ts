@@ -267,5 +267,17 @@ export const actions: ActionTree<YotpoState, any> = {
     } catch (err) {
       console.error(err);
     }
+  },
+
+  async loadReviewsPerStore({ commit }, { page = 1 }) {
+    try {
+      const appKey = GetKey()
+      const reviewsPerPage = 10
+      const res = await fetch(`${baseUrl}products/${appKey}/yotpo_global_reviews/reviews.json?count=${reviewsPerPage}&page=${page}`)
+      const { response } = await res.json()
+      commit(types.SET_REVIEWS_PER_STORE, response)
+    } catch (err) {
+      console.log(err)
+    }
   }
 };
