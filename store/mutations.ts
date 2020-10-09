@@ -109,6 +109,7 @@ export const mutations: MutationTree<any> = {
     state.totals = payload;
   },
   [types.SET_REVIEWS_PER_STORE](state, payload) {
-    state.reviewsPerStore = payload
+    state.reviewsPerStoreCounter = payload.bottomline
+    state.reviewsPerStore.push(...payload.reviews)
   }
 };
