@@ -5,5 +5,6 @@ export const state: YotpoState = {
   productReviews: {},
   widgetSiteReviews: {},
   albums: {},
-  totals: null
+  totals: null,
+  reviewsPerStore: {}
 };

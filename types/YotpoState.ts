@@ -7,4 +7,5 @@ export interface YotpoState {
     total_reviews: number;
     average_rating: number;
   } | null;
+  reviewsPerStore?: object
 }

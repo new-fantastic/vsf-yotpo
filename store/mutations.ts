@@ -107,5 +107,8 @@ export const mutations: MutationTree<any> = {
 
   [types.SET_TOTALS](state, payload) {
     state.totals = payload;
+  },
+  [types.SET_REVIEWS_PER_STORE](state, payload) {
+    state.reviewsPerStore = payload
   }
 };
